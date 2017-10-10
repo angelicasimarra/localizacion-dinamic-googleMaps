@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      #map_canvas {
+        height: 500px;
+    	width: 50%;
+      }
+      
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+		#inputxxxxx{
+			font-size: 18px;
+			margin-top: 20px;
+		    width: 600px;
+			margin-bottom: 20px;
+		}
+
+    </style>
+  </head>
+  <body>
+  	<strong>LAT/LONG:</strong> <input type="text" id="inputxxxxx" name="inputxxxxx" value="10.3997200 / -75.5144400">
+    <div id="map_canvas"></div>  
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initialize"   async defer></script>
+   
+    <script>
+
+		 var map = null;
+		var infoWindow = null;
+		 
+		function openInfoWindow(marker) {
+		    var markerLatLng = marker.getPosition();
+		    var lat_long = markerLatLng.lat() + " / " + markerLatLng.lng();
+		    $('#inputxxxxx').val(lat_long);
+		    infoWindow.setContent([
+		        '<strong>La posicion del marcador es:</strong><br/>',
+		        markerLatLng.lat(),
+		        ', ',
+		        markerLatLng.lng(),
+		        '<br/>Arrástrame para actualizar la posición.'
+		    ].join(''));
+		    infoWindow.open(map, marker);
+		}
+		 
+		function initialize() {
+		    var myLatlng = new google.maps.LatLng("10.3997200", "-75.5144400");
+		    var myOptions = {
+		      zoom: 13,
+		      center: myLatlng,
+		      mapTypeId: google.maps.MapTypeId.ROADMAP
+		    }
+		 
+		    map = new google.maps.Map($("#map_canvas").get(0), myOptions);
+		 
+		    infoWindow = new google.maps.InfoWindow();
+		 
+		    var marker = new google.maps.Marker({
+		        position: myLatlng,
+		        draggable: true,
+		        map: map,
+		        title:"Ejemplo marcador arrastrable"
+		    });
+		        google.maps.event.addListener(marker, 'dragend', function(){ openInfoWindow(marker); });
+			google.maps.event.addListener(marker, 'click', function(){ openInfoWindow(marker); });
+		}
+
+
+    </script>
+  </body>
+</html>
